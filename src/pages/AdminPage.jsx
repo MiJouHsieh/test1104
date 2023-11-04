@@ -1,14 +1,8 @@
-// import Input from "components/Input";
-// export default function AdminPage() {
-//   return <Input />;
-// }
 import { useState } from "react";
 import styles from "styles/AdminPage.module.scss";
 import BrandIcon from "icons/Icon.png";
-// import AdminLogInBtn from "icons/adminLoginBtn.svg"
 import { ReactComponent as AdminLogInBtn } from "icons/adminLoginBtn.svg";
-// import { Link } from "react-router-dom";
-
+import {adminLogin} from '../api/auth'
 const AuthInput = ({ type, label, value, placeholder, onChange }) => {
   return (
     <div className={styles.inputContainer}>
@@ -22,11 +16,34 @@ const AuthInput = ({ type, label, value, placeholder, onChange }) => {
     </div>
   );
 };
-// export default AuthInput;
 
 const AdminPage = () => {
-  const [userName, setUserName] = useState("");
+  const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
+
+ 
+  
+  //handler
+  const handleClick = async () => {
+
+    if (account.length === 0) {
+      return;
+    }
+    if (password.length === 0) {
+      return;
+    }
+    //確認輸入值
+    console.log(`輸入的帳號為 ${account}`);
+    console.log(`輸入的密碼為 ${password}`);
+
+    const  data = await adminLogin({
+      account,
+      password
+    });
+    console.log(`回傳資料${data}`)
+  };
+
+
   return (
     <div className={styles.adminLogInContainer}>
       <div className={styles.brandContainer}>
@@ -36,9 +53,9 @@ const AdminPage = () => {
       <div>
         <AuthInput
           label={"帳號"}
-          value={userName}
+          value={account}
           placeholder={"請輸入帳號"}
-          onChange={(nameInputValue) => setUserName(nameInputValue)}
+          onChange={(nameInputValue) => setAccount(nameInputValue)}
         />
 
         <AuthInput
@@ -50,7 +67,7 @@ const AdminPage = () => {
         />
       </div>
       <button>
-        <AdminLogInBtn />
+        <AdminLogInBtn  onClick={handleClick}/>
       </button>
       {/* <Link to="/admin/tweets"> */}
       <div className={styles.linkText}>前台登入</div>
@@ -58,4 +75,5 @@ const AdminPage = () => {
     </div>
   );
 };
+
 export default AdminPage;

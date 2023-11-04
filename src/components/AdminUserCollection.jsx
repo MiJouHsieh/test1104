@@ -1,7 +1,9 @@
 import styles from "styles/AdminUsers.module.scss";
 import { ReactComponent as LikeIcon } from "icons/like.svg";
 import { ReactComponent as PostTweetsIcon } from "icons/postTweets.svg";
-import { adminUsersData } from "data/adminUsersData.js";
+//import { adminUsersData } from "data/adminUsersData.js";
+import {useState,useEffect} from 'react' 
+import {getUsers} from "api/twitter"
 
 const AdminUserCardItem = ({
   account,
@@ -53,14 +55,33 @@ const AdminUserCardItem = ({
   );
 };
 
+
+
+
 const AdminUserCollection = () => {
+  
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    const getUsersAsync = async () => {
+      try {
+        const users = await getUsers();
+        setUsers(users);
+        console.log(users);
+      } catch (error) {
+        console.error (error);
+      }
+    };
+    getUsersAsync();
+  }, []);
+
   return (
     <div className={styles.tweetContainer}>
       <header className={styles.header}>
         <h4>使用者列表</h4>
       </header>
       <div className={styles.userCardsContainer}>
-        {adminUsersData.map((adminUserItem) => {
+        {users.map((adminUserItem) => {
           return (
             <AdminUserCardItem key={adminUserItem.id} {...adminUserItem} />
           );

@@ -1,6 +1,7 @@
 // import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // import {  AdminPage, AdminMainPage, AdminUserPage} from 'pages'
-import  AdminPage from './pages/AdminPage'
+ import  AdminPage from './pages/AdminPage'
+// import AdminUser from "pages/AdminUserPage"
 import './styles/reset.scss'
 import  './styles/base.scss'
 
@@ -14,14 +15,7 @@ function App() {
   return (
     <>
     <div >
-      {/* <BrowserRouter>
-        <Routes>
-          <Route path="admin" element={<AdminPage />} />
-          <Route path="admin/main" element={<AdminMainPage />} />
-          <Route path="admin/users" element={<AdminUserPage />} />
-        </Routes>
-      </BrowserRouter> */}
-      {/* <AdminMainPage/> */}
+    {/* <AdminUser/> */}
       <AdminPage />
 
     </div>
