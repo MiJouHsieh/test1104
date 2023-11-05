@@ -1,8 +1,11 @@
 import { useState } from "react";
 import styles from "styles/AdminPage.module.scss";
-import BrandIcon from "icons/Icon.png";
 import { ReactComponent as AdminLogInBtn } from "icons/adminLoginBtn.svg";
+//import { ReactComponent as Logo } from "icons/logo.svg";
 import {adminLogin} from '../api/auth'
+import Swal from 'sweetalert2';
+import { useNavigate } from "react-router-dom"; 
+
 const AuthInput = ({ type, label, value, placeholder, onChange }) => {
   return (
     <div className={styles.inputContainer}>
@@ -20,34 +23,53 @@ const AuthInput = ({ type, label, value, placeholder, onChange }) => {
 const AdminPage = () => {
   const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
-
- 
+  const navigate = useNavigate('')
+  
   
   //handler
   const handleClick = async () => {
-
     if (account.length === 0) {
       return;
     }
     if (password.length === 0) {
       return;
     }
-    //確認輸入值
-    console.log(`輸入的帳號為 ${account}`);
-    console.log(`輸入的密碼為 ${password}`);
-
-    const  data = await adminLogin({
+    const  {success, token, Authorization} = await adminLogin({
       account,
       password
     });
-    console.log(`回傳資料${data}`)
+
+
+    if(success){
+      localStorage.setItem('token', token);
+      console.log(token)
+      localStorage.setItem('Authorization', JSON.stringify(Authorization));
+      Swal.fire({
+        position: 'top',
+        title: '登入成功！',
+        timer: 1000,
+        icon: 'success',
+        showConfirmButton: false,
+      });
+      navigate('main');
+    }else{
+      Swal.fire({
+        position: 'top',
+        title: '登入失敗！',
+        timer: 1000,
+        icon: 'error',
+        showConfirmButton: false,
+      });
+    }
   };
+
+
 
 
   return (
     <div className={styles.adminLogInContainer}>
       <div className={styles.brandContainer}>
-        <img src={BrandIcon} alt="brand-icon" />
+        {/* <Logo/> */}
       </div>
       <h3>後台登入</h3>
       <div>
@@ -69,9 +91,7 @@ const AdminPage = () => {
       <button>
         <AdminLogInBtn  onClick={handleClick}/>
       </button>
-      {/* <Link to="/admin/tweets"> */}
       <div className={styles.linkText}>前台登入</div>
-      {/* </Link> */}
     </div>
   );
 };
